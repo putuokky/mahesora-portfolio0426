@@ -2,12 +2,9 @@ import { MinimalistProgrammerLinktree, LinkItem } from "@/components/minimalist-
 import { links } from "@/data/links";
 import { iconMap } from "@/data/iconMap";
 import ClientBackground from "@/components/ClientBackground";
+import { profile } from "@/data/profile";
 
 export default function Home() {
-  const name = "Okky Maheswara";
-  const role = "Full Stack Developer | Data Science Enthusiast";
-  const pictureUrl = 'https://avatars.githubusercontent.com/u/47545776?v=4';
-
   const mappedLinks: LinkItem[] = links.map((link) => {
     const iconConfig = iconMap[link.icon as keyof typeof iconMap];
 
@@ -18,24 +15,26 @@ export default function Home() {
     return {
       ...link,
       icon: (
-        <Icon className={`h-6 w-6 ${iconConfig.className} transition-transform duration-200 hover:scale-110`} />
+        <Icon className={`h-6 w-6 ${iconConfig.className} transition-all duration-200 group-hover:scale-105`} />
       ),
     };
   });
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-hidden">
 
-      {/* FIX DI SINI */}
-      <div className="absolute inset-0" suppressHydrationWarning>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        suppressHydrationWarning
+      >
         <ClientBackground />
       </div>
 
       <div className="relative z-10">
         <MinimalistProgrammerLinktree
-          name={name}
-          role={role}
-          pictureUrl={pictureUrl}
+          name={profile.name}
+          role={profile.role}
+          pictureUrl={profile.pictureUrl}
           links={mappedLinks}
         />
       </div>

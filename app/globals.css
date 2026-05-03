@@ -167,3 +167,11 @@ body {
 .meta-link a {
     text-decoration: none;
 }
+/* subtle lighting biar premium */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.15), transparent 40%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15), transparent 40%);
+    z-index: 0;
+}
