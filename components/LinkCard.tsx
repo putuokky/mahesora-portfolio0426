@@ -1,6 +1,11 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import {
+    motion,
+    useMotionValue,
+    useSpring,
+    useTransform,
+} from "framer-motion";
 
 type Props = {
     name: string;
@@ -9,69 +14,76 @@ type Props = {
 };
 
 export default function LinkCard({ name, icon, url }: Props) {
-    // ✅ Hooks di top level (VALID)
-    const rotateX = useMotionValue(0);
-    const rotateY = useMotionValue(0);
+    // PARALLAX
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
 
-    const smoothX = useSpring(rotateX, {
-        stiffness: 150,
-        damping: 15,
-    });
+    const rotateX = useTransform(y, [-50, 50], [8, -8]);
+    const rotateY = useTransform(x, [-50, 50], [-8, 8]);
 
-    const smoothY = useSpring(rotateY, {
-        stiffness: 150,
-        damping: 15,
-    });
+    const smoothX = useSpring(x, { stiffness: 120, damping: 12 });
+    const smoothY = useSpring(y, { stiffness: 120, damping: 12 });
+
+    // LIGHT EFFECT
+    const lightX = useTransform(smoothX, [-50, 50], ["0%", "100%"]);
+    const lightY = useTransform(smoothY, [-50, 50], ["0%", "100%"]);
 
     return (
         <motion.a
             href={url}
             target="_blank"
             style={{
-                rotateX: smoothX,
-                rotateY: smoothY,
-                transformPerspective: 800,
+                rotateX,
+                rotateY,
+                transformPerspective: 900,
             }}
             onMouseMove={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
+                const px = e.clientX - rect.left - rect.width / 2;
+                const py = e.clientY - rect.top - rect.height / 2;
 
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-
-                rotateX.set(((y - centerY) / centerY) * -6);
-                rotateY.set(((x - centerX) / centerX) * 6);
+                x.set(px);
+                y.set(py);
             }}
             onMouseLeave={() => {
-                rotateX.set(0);
-                rotateY.set(0);
+                x.set(0);
+                y.set(0);
             }}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            className="
-        group relative flex items-center justify-between
-        px-4 py-3 rounded-xl
-        border border-white/10
-        bg-white/5 backdrop-blur-xl
-        shadow-[0_8px_32px_rgba(0,0,0,0.3)]
-        overflow-hidden transition
-      "
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            className="relative group block"
         >
-            {/* Glow */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition">
-                <div className="w-full h-full bg-linear-to-r from-blue-500/10 via-transparent to-purple-500/10 blur-xl" />
-            </div>
+            {/* 🔥 BORDER GLOW */}
+            <div className="absolute inset-0 rounded-xl p-0.5 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition duration-300 blur-sm" />
 
-            <div className="flex items-center gap-3 z-10">
-                <span>{icon}</span>
-                <span>{name}</span>
-            </div>
+            {/* 🔥 MAIN CARD */}
+            <motion.div
+                style={{
+                    background: `radial-gradient(circle at ${lightX} ${lightY}, rgba(255,255,255,0.15), transparent 40%)`,
+                }}
+                className="
+          relative flex items-center justify-between
+          px-4 py-3 rounded-xl
+          bg-black/60 backdrop-blur-xl
+          border border-white/10
+          shadow-[0_10px_40px_rgba(0,0,0,0.6)]
+          overflow-hidden
+        "
+            >
+                {/* Glow overlay */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300">
+                    <div className="w-full h-full bg-linear-to-r from-blue-500/10 via-transparent to-purple-500/10 blur-2xl" />
+                </div>
 
-            <span className="text-white/40 z-10 group-hover:translate-x-1 transition">
-                ›
-            </span>
+                <div className="flex items-center gap-3 z-10">
+                    <span className="text-lg">{icon}</span>
+                    <span className="font-medium tracking-wide">{name}</span>
+                </div>
+
+                <span className="text-white/40 z-10 group-hover:translate-x-1 transition">
+                    →
+                </span>
+            </motion.div>
         </motion.a>
     );
 }

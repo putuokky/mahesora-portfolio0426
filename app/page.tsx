@@ -1,4 +1,4 @@
-import { MinimalistProgrammerLinktree, LinkItem } from "@/components/minimalist-programmer-linktree";
+import { MinimalistProgrammerLinktree, LinkItem } from "@/components/MinimalistProgrammerLinktree";
 import { links } from "@/data/links";
 import { iconMap } from "@/data/iconMap";
 import ClientBackground from "@/components/ClientBackground";
@@ -22,14 +22,11 @@ export default function Home() {
   });
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-black">
 
       <CursorGlow />
 
-      <div
-        className="absolute inset-0 pointer-events-none"
-        suppressHydrationWarning
-      >
+      <div className="absolute inset-0 opacity-70">
         <ClientBackground />
       </div>
 

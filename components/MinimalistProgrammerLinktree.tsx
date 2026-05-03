@@ -63,24 +63,27 @@ export function MinimalistProgrammerLinktree({
                 className="text-center w-full max-w-md mx-auto space-y-5"
             >
                 {/* PROFILE */}
-                <motion.div
-                    variants={profileAnim}
-                    className="flex flex-col items-center mb-6"
-                >
-                    <div className="w-28 h-28 rounded-full p-0.5 bg-linear-to-tr from-blue-500 to-purple-500 mb-4">
-                        <div className="w-full h-full rounded-full overflow-hidden bg-black">
-                            <Image
-                                src={pictureUrl}
-                                alt={name}
-                                width={112}
-                                height={112}
-                                className="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
-                                priority
-                            />
+                <motion.div variants={profileAnim} className="flex flex-col items-center mb-6">
+                    <div className="relative">
+
+                        {/* Glow */}
+                        <div className="absolute inset-0 blur-2xl bg-blue-500/20 rounded-full" />
+
+                        <div className="w-28 h-28 rounded-full p-0.5 bg-linear-to-tr from-blue-500 to-purple-500">
+                            <div className="w-full h-full rounded-full overflow-hidden bg-black">
+                                <Image
+                                    src={pictureUrl}
+                                    alt={name}
+                                    width={112}
+                                    height={112}
+                                    className="object-cover w-full h-full hover:scale-110 transition duration-500"
+                                    priority
+                                />
+                            </div>
                         </div>
                     </div>
 
-                    <h1 className="text-2xl font-bold tracking-wide">{name}</h1>
+                    <h1 className="text-2xl font-bold tracking-wide mt-4">{name}</h1>
                     <p className="text-white/60">{role}</p>
                 </motion.div>
 
