@@ -3,6 +3,7 @@ import { links } from "@/data/links";
 import { iconMap } from "@/data/iconMap";
 import ClientBackground from "@/components/ClientBackground";
 import { profile } from "@/data/profile";
+import CursorGlow from "@/components/CursorGlow";
 
 export default function Home() {
   const mappedLinks: LinkItem[] = links.map((link) => {
@@ -22,6 +23,8 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
+
+      <CursorGlow />
 
       <div
         className="absolute inset-0 pointer-events-none"
