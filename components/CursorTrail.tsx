@@ -1,82 +1,51 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useEffect } from "react";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import { useEffect, useState } from "react";
+import { useMotionValue } from "framer-motion";
+
+type Point = {
+    x: number;
+    y: number;
+};
 
 export default function CursorTrail() {
-    const isMobile = useIsMobile();
+    // ✅ hooks SELALU di atas
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
 
-    const isLowEnd =
-        typeof navigator !== "undefined" &&
-        (navigator.hardwareConcurrency || 4) <= 4;
+    const [points, setPoints] = useState<Point[]>([]);
 
-    const disabled = isMobile || isLowEnd;
-
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-
-    const smoothX = useSpring(x, {
-        stiffness: 300,
-        damping: 30,
-    });
-
-    const smoothY = useSpring(y, {
-        stiffness: 300,
-        damping: 30,
-    });
-
-    // ✅ HOOK SELALU DIPANGGIL (WAJIB)
     useEffect(() => {
-        if (disabled) return; // guard di dalam effect, bukan skip hook
+        const move = (e: MouseEvent) => {
+            mouseX.set(e.clientX);
+            mouseY.set(e.clientY);
 
-        let lastTime = 0;
-
-        const handleMove = (e: MouseEvent) => {
-            const now = performance.now();
-            if (now - lastTime < 8) return;
-            lastTime = now;
-
-            x.set(e.clientX);
-            y.set(e.clientY);
+            setPoints((prev) => [
+                { x: e.clientX, y: e.clientY },
+                ...prev.slice(0, 10), // limit trail
+            ]);
         };
 
-        window.addEventListener("mousemove", handleMove);
-
-        return () => window.removeEventListener("mousemove", handleMove);
-    }, [x, y, disabled]);
-
-    // ✅ render guard di sini (boleh)
-    if (disabled) return null;
-
-    const TRAIL_COUNT = 10;
+        window.addEventListener("mousemove", move);
+        return () => window.removeEventListener("mousemove", move);
+    }, [mouseX, mouseY]);
 
     return (
-        <div className="pointer-events-none fixed inset-0 z-50">
-            {[...Array(TRAIL_COUNT)].map((_, i) => {
-                const size = 10 - i * 0.7;
-                const opacity = Math.pow(1 - i / TRAIL_COUNT, 2);
-                const blur = i === 0 ? "none" : `blur(${i * 2}px)`;
+        <div className="pointer-events-none fixed inset-0 z-9999">
+            {points.map((p, i) => {
+                const isCore = i === 0;
 
                 return (
-                    <motion.div
+                    <div
                         key={i}
+                        className={`absolute rounded-full ${isCore ? "w-3 h-3 bg-white" : "w-2 h-2 bg-white/40"
+                            }`}
                         style={{
-                            x: smoothX,
-                            y: smoothY,
+                            left: p.x,
+                            top: p.y,
+                            transform: "translate(-50%, -50%)",
                         }}
-                        className="absolute -translate-x-1/2 -translate-y-1/2"
-                    >
-                        <div
-                            className="rounded-full bg-linear-to-r from-pink-500 via-purple-500 to-blue-500"
-                            style={{
-                                width: size,
-                                height: size,
-                                opacity,
-                                filter: blur,
-                            }}
-                        />
-                    </motion.div>
+                    />
                 );
             })}
         </div>

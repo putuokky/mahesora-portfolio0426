@@ -5,7 +5,6 @@ import ClientBackground from "@/components/ClientBackground";
 import { profile } from "@/data/profile";
 // import CursorGlow from "@/components/CursorGlow";
 import CursorTrail from "@/components/CursorTrail";
-// import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
   const mappedLinks: LinkItem[] = links.map((link) => {
