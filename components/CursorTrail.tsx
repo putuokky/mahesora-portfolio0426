@@ -2,14 +2,20 @@
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useEffect } from "react";
-
-const TRAIL_COUNT = 12;
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 export default function CursorTrail() {
+    const isMobile = useIsMobile();
+
+    const isLowEnd =
+        typeof navigator !== "undefined" &&
+        (navigator.hardwareConcurrency || 4) <= 4;
+
+    const disabled = isMobile || isLowEnd;
+
     const x = useMotionValue(0);
     const y = useMotionValue(0);
 
-    // Smooth follow
     const smoothX = useSpring(x, {
         stiffness: 300,
         damping: 30,
@@ -20,21 +26,37 @@ export default function CursorTrail() {
         damping: 30,
     });
 
+    // ✅ HOOK SELALU DIPANGGIL (WAJIB)
     useEffect(() => {
+        if (disabled) return; // guard di dalam effect, bukan skip hook
+
+        let lastTime = 0;
+
         const handleMove = (e: MouseEvent) => {
+            const now = performance.now();
+            if (now - lastTime < 8) return;
+            lastTime = now;
+
             x.set(e.clientX);
             y.set(e.clientY);
         };
 
         window.addEventListener("mousemove", handleMove);
+
         return () => window.removeEventListener("mousemove", handleMove);
-    }, [x, y]);
+    }, [x, y, disabled]);
+
+    // ✅ render guard di sini (boleh)
+    if (disabled) return null;
+
+    const TRAIL_COUNT = 10;
 
     return (
         <div className="pointer-events-none fixed inset-0 z-50">
             {[...Array(TRAIL_COUNT)].map((_, i) => {
-                const size = 10 - i * 0.6;
-                const opacity = 1 - i * 0.08;
+                const size = 10 - i * 0.7;
+                const opacity = Math.pow(1 - i / TRAIL_COUNT, 2);
+                const blur = i === 0 ? "none" : `blur(${i * 2}px)`;
 
                 return (
                     <motion.div
@@ -42,10 +64,6 @@ export default function CursorTrail() {
                         style={{
                             x: smoothX,
                             y: smoothY,
-                        }}
-                        transition={{
-                            delay: i * 0.03,
-                            ease: "easeOut",
                         }}
                         className="absolute -translate-x-1/2 -translate-y-1/2"
                     >
@@ -55,7 +73,7 @@ export default function CursorTrail() {
                                 width: size,
                                 height: size,
                                 opacity,
-                                filter: i === 0 ? "none" : "blur(6px)",
+                                filter: blur,
                             }}
                         />
                     </motion.div>

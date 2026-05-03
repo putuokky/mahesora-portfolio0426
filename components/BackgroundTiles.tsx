@@ -15,7 +15,7 @@ export default function BackgroundTiles() {
                 }}
                 className="tileContainer"
             >
-                {[...Array(800)].map((_, i) => (
+                {[...Array(400)].map((_, i) => (
                     <div key={i} className="tile" />
                 ))}
             </motion.div>

@@ -3,8 +3,9 @@ import { links } from "@/data/links";
 import { iconMap } from "@/data/iconMap";
 import ClientBackground from "@/components/ClientBackground";
 import { profile } from "@/data/profile";
-import CursorGlow from "@/components/CursorGlow";
+// import CursorGlow from "@/components/CursorGlow";
 import CursorTrail from "@/components/CursorTrail";
+// import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Home() {
   const mappedLinks: LinkItem[] = links.map((link) => {
@@ -27,9 +28,9 @@ export default function Home() {
 
       <CursorTrail />
 
-      <CursorGlow />
+      {/* <CursorGlow /> */}
 
-      <div className="absolute inset-0 opacity-70">
+      <div className="absolute inset-0 opacity-50">
         <ClientBackground />
       </div>
 
