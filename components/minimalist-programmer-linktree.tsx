@@ -51,7 +51,7 @@ export function MinimalistProgrammerLinktree({
                             target="_blank"
                             className="flex items-center justify-between bg-zinc-900/80 backdrop-blur px-4 py-3 rounded-xl border border-zinc-700 hover:border-zinc-500 hover:bg-zinc-800 transition-all duration-200 hover:scale-[1.02]"
                         >
-                            <div className="absolute inset-0 rounded-xl opacity-0 hover:opacity-100 transition bg-gradient-to-r from-purple-500/10 to-blue-500/10" />
+                            <div className="absolute inset-0 rounded-xl opacity-0 hover:opacity-100 transition bg-linear-to-r from-purple-500/10 to-blue-500/10" />
                             <div className="flex items-center gap-3">
                                 <span className="text-white flex items-center justify-center">{link.icon}</span>
                                 <span>{link.name}</span>

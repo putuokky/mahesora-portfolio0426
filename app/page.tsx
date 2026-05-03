@@ -1,25 +1,42 @@
-// import { MessageCircle, Mail } from 'lucide-react';
-import { Github, MessageCircle, Linkedin, Mail } from 'lucide-react';
 import { MinimalistProgrammerLinktree, LinkItem } from "@/components/minimalist-programmer-linktree";
+import { links } from "@/data/links";
+import { iconMap } from "@/data/iconMap";
+import ClientBackground from "@/components/ClientBackground";
 
 export default function Home() {
   const name = "Okky Maheswara";
   const role = "Full Stack Developer | Data Science Enthusiast";
   const pictureUrl = 'https://avatars.githubusercontent.com/u/47545776?v=4';
 
-  const links: LinkItem[] = [
-    { name: 'LinkedIn', icon: <Linkedin />, url: 'https://www.linkedin.com/in/okkymahesora/' },
-    { name: 'GitHub', icon: <Github />, url: 'https://github.com/putuokky' },
-    { name: 'WhatsApp', icon: <MessageCircle />, url: 'https://wa.me/6287883393901' },
-    { name: 'Email', icon: <Mail />, url: 'mailto:okkymahes@gmail.com' },
-  ];
+  const mappedLinks: LinkItem[] = links.map((link) => {
+    const iconConfig = iconMap[link.icon as keyof typeof iconMap];
+
+    if (!iconConfig) return link;
+
+    const Icon = iconConfig.component;
+
+    return {
+      ...link,
+      icon: (
+        <Icon className={`h-6 w-6 ${iconConfig.className} transition-transform duration-200 hover:scale-110`} />
+      ),
+    };
+  });
 
   return (
-    <MinimalistProgrammerLinktree
-      name={name}
-      role={role}
-      pictureUrl={pictureUrl}
-      links={links}
-    />
+    <div className="relative min-h-screen">
+
+      <ClientBackground />
+
+      <div className="relative z-10">
+        <MinimalistProgrammerLinktree
+          name={name}
+          role={role}
+          pictureUrl={pictureUrl}
+          links={mappedLinks}
+        />
+      </div>
+
+    </div>
   );
 }
