@@ -21,6 +21,10 @@
     }
 }
 
+* {
+    cursor: none;
+}
+
 /* ================= BASE ================= */
 body {
     background: var(--background);

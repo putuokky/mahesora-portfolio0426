@@ -4,6 +4,7 @@ import { iconMap } from "@/data/iconMap";
 import ClientBackground from "@/components/ClientBackground";
 import { profile } from "@/data/profile";
 import CursorGlow from "@/components/CursorGlow";
+import CursorTrail from "@/components/CursorTrail";
 
 export default function Home() {
   const mappedLinks: LinkItem[] = links.map((link) => {
@@ -23,6 +24,8 @@ export default function Home() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-black">
+
+      <CursorTrail />
 
       <CursorGlow />
 
