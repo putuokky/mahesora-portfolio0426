@@ -16,6 +16,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Hi, I'm Mahesora",
   description: "Building scalable web apps & modern UI experiences.",
+  metadataBase: new URL("https://mahesora.id"),
   openGraph: {
     title: "Okky Maheswara",
     description: "Fullstack Developer Portfolio",
@@ -26,10 +27,24 @@ export const metadata: Metadata = {
         url: "/og.png", // taruh di public/
         width: 1200,
         height: 630,
+        alt: "Mahesora Portfolio Preview",
       },
     ],
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Okky Maheswara",
+    description: "Fullstack Developer Portfolio",
+    images: ["/og.png"],
+  },
+  keywords: [
+    "Fullstack Developer",
+    "Next.js",
+    "React",
+    "UI Developer",
+    "Portfolio"
+  ],
 };
 
 export default function RootLayout({
