@@ -1,5 +1,6 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
+import DiscordIcon from "@/components/icons/DiscordIcon";
 
 export const iconMap = {
     linkedin: {
@@ -17,5 +18,9 @@ export const iconMap = {
     email: {
         component: Mail,
         className: "text-red-500",
+    },
+    discord: {
+        component: DiscordIcon,
+        className: "text-indigo-500",
     },
 };
