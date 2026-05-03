@@ -1,11 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-const BackgroundTiles = dynamic(
-    () => import("./BackgroundTiles"),
-    { ssr: false }
-);
+import BackgroundTiles from "./BackgroundTiles";
 
 export default function ClientBackground() {
     return <BackgroundTiles />;

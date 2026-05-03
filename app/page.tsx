@@ -26,7 +26,10 @@ export default function Home() {
   return (
     <div className="relative min-h-screen">
 
-      <ClientBackground />
+      {/* FIX DI SINI */}
+      <div className="absolute inset-0" suppressHydrationWarning>
+        <ClientBackground />
+      </div>
 
       <div className="relative z-10">
         <MinimalistProgrammerLinktree
