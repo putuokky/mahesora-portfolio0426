@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useMotionValue } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 type Point = {
     x: number;
@@ -9,45 +8,64 @@ type Point = {
 };
 
 export default function CursorTrail() {
-    // ✅ hooks SELALU di atas
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
-
-    const [points, setPoints] = useState<Point[]>([]);
+    const points = useRef<Point[]>([]);
+    const rafId = useRef<number | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const move = (e: MouseEvent) => {
-            mouseX.set(e.clientX);
-            mouseY.set(e.clientY);
+            points.current.unshift({ x: e.clientX, y: e.clientY });
 
-            setPoints((prev) => [
-                { x: e.clientX, y: e.clientY },
-                ...prev.slice(0, 10), // limit trail
-            ]);
+            if (points.current.length > 15) {
+                points.current.pop();
+            }
+
+            if (!rafId.current) {
+                rafId.current = requestAnimationFrame(render);
+            }
+        };
+
+        const render = () => {
+            if (!containerRef.current) return;
+
+            const children = containerRef.current.children;
+
+            points.current.forEach((p, i) => {
+                const el = children[i] as HTMLElement;
+                if (!el) return;
+
+                el.style.transform = `translate(${p.x}px, ${p.y}px)`;
+            });
+
+            rafId.current = null;
         };
 
         window.addEventListener("mousemove", move);
-        return () => window.removeEventListener("mousemove", move);
-    }, [mouseX, mouseY]);
+
+        return () => {
+            window.removeEventListener("mousemove", move);
+            if (rafId.current) cancelAnimationFrame(rafId.current);
+        };
+    }, []);
 
     return (
-        <div className="pointer-events-none fixed inset-0 z-9999">
-            {points.map((p, i) => {
-                const isCore = i === 0;
-
-                return (
-                    <div
-                        key={i}
-                        className={`absolute rounded-full ${isCore ? "w-3 h-3 bg-white" : "w-2 h-2 bg-white/40"
-                            }`}
-                        style={{
-                            left: p.x,
-                            top: p.y,
-                            transform: "translate(-50%, -50%)",
-                        }}
-                    />
-                );
-            })}
+        <div
+            ref={containerRef}
+            className="pointer-events-none fixed inset-0 z-9999"
+        >
+            {Array.from({ length: 15 }).map((_, i) => (
+                <div
+                    key={i}
+                    className="absolute left-0 top-0 rounded-full"
+                    style={{
+                        width: i === 0 ? 10 : 6,
+                        height: i === 0 ? 10 : 6,
+                        background: i === 0 ? "white" : "rgba(255,255,255,0.3)",
+                        transform: "translate(-999px,-999px)",
+                        transition: "transform 0.1s linear",
+                    }}
+                />
+            ))}
         </div>
     );
 }
