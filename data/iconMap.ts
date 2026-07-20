@@ -1,4 +1,4 @@
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Globe, Linkedin, Mail } from "lucide-react";
 import WhatsAppIcon from "@/components/icons/WhatsAppIcon";
 import DiscordIcon from "@/components/icons/DiscordIcon";
 
@@ -21,6 +21,10 @@ export const iconMap = {
     },
     discord: {
         component: DiscordIcon,
+        className: "text-indigo-500",
+    },
+    website: {
+        component: Globe,
         className: "text-indigo-500",
     },
 };

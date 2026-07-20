@@ -1,5 +1,10 @@
 export const links = [
     {
+        name: 'Portfolio',
+        icon: 'website',
+        url: '#',
+    },
+    {
         name: 'LinkedIn',
         icon: 'linkedin',
         url: 'https://www.linkedin.com/in/okkymahesora/',
@@ -22,6 +27,6 @@ export const links = [
     {
         name: 'Email',
         icon: 'email',
-        url: 'mailto:okkymahes@gmail.com',
+        url: 'mailto:info@mahesora.id',
     },
 ];
