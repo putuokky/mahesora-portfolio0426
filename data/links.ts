@@ -2,7 +2,7 @@ export const links = [
     {
         name: 'Portfolio',
         icon: 'website',
-        url: '#',
+        url: 'https://portfolio.mahesora.id/',
     },
     {
         name: 'LinkedIn',
